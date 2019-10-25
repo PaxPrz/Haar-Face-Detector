@@ -157,77 +157,77 @@ function calculateSquaredIntegralImage(){
     console.log('Squared Integral Image:', squaredIntegralImage);
 }
 
-function detectFace(){
-    rects=[];
-    windowWidth = classifier[0];
-    windowHeight = classifier[1];
-    scaleFactor = 2;
-    scale = 0.5;
-    do{
-        var scaledWinWidth = parseInt(windowWidth*scaleFactor);
-        var scaledWinHeight = parseInt(windowHeight*scaleFactor);
-        var area = scaledWinHeight*scaledWinWidth;
-        var step = 40; //parseInt(scaledWinWidth/2);
-        for(var x=0; x+scaledWinWidth < ctx.width; x+= step){
-            for(var y=0; y+scaledWinHeight <ctx.height; y+=step){
-                var mean = (integralImage[x][y]-integralImage[x+scaledWinWidth][y]-integralImage[x][y+scaledWinHeight]+integralImage[x+scaledWinWidth][y+scaledWinHeight]);
-                var variance = (squaredIntegralImage[x][y]-squaredIntegralImage[x+scaledWinWidth][y]-squaredIntegralImage[x][y+scaledWinHeight]+squaredIntegralImage[x+scaledWinHeight][y+scaledWinWidth])*area-(mean*mean);
-                var std = variance > 1 ? Math.sqrt(variance) : 1;
-                var found = true;
+// function detectFace(){
+//     rects=[];
+//     windowWidth = classifier[0];
+//     windowHeight = classifier[1];
+//     scaleFactor = 2;
+//     scale = 0.5;
+//     do{
+//         var scaledWinWidth = parseInt(windowWidth*scaleFactor);
+//         var scaledWinHeight = parseInt(windowHeight*scaleFactor);
+//         var area = scaledWinHeight*scaledWinWidth;
+//         var step = 40; //parseInt(scaledWinWidth/2);
+//         for(var x=0; x+scaledWinWidth < ctx.width; x+= step){
+//             for(var y=0; y+scaledWinHeight <ctx.height; y+=step){
+//                 var mean = (integralImage[x][y]-integralImage[x+scaledWinWidth][y]-integralImage[x][y+scaledWinHeight]+integralImage[x+scaledWinWidth][y+scaledWinHeight])/area;
+//                 var variance = (squaredIntegralImage[x][y]-squaredIntegralImage[x+scaledWinWidth][y]-squaredIntegralImage[x][y+scaledWinHeight]+squaredIntegralImage[x+scaledWinHeight][y+scaledWinWidth])/area-(mean*mean);
+//                 var std = variance > 1 ? Math.sqrt(variance) : 1;
+//                 var found = true;
 
-                for(var i=1, iEnd=classifier.length-1; i<iEnd;){
-                    var complexClassifierThreshold = classifier[++i];
-                    var complexClassifierSum = 0;
-                    for(var j=0; j<classifier[++i]; j++){
-                        var simpleClassifierSum = 0;
+//                 for(var i=1, iEnd=classifier.length-1; i<iEnd;){
+//                     var complexClassifierThreshold = classifier[++i];
+//                     var complexClassifierSum = 0;
+//                     for(var j=0; j<classifier[++i]; j++){
+//                         var simpleClassifierSum = 0;
 
-                        if(classifier[++i]){
-                            //Simple classifier is tilted;
-                            var counter = classifier[++i];
-                            for(var k=0; k<counter; k++){
-                                var left = parseInt(classifier[++i]*scaleFactor);
-                                var top = parseInt(classifier[++i]*scaleFactor);
-                                var right = parseInt(classifier[++i]*scaleFactor)+left;
-                                var bottom = parseInt(classifier[++i]*scaleFactor)+top;
-                                var weight = classifier[++i];
-                                simpleClassifierSum += weight*(rotIntegralImage[bottom][right]-rotIntegralImage[bottom][left]-rotIntegralImage[top][right]+rotIntegralImage[top][left]);
-                            }
-                        }
-                        else{
-                            var counter = classifier[++i];
+//                         if(classifier[++i]){
+//                             //Simple classifier is tilted;
+//                             var counter = classifier[++i];
+//                             for(var k=0; k<counter; k++){
+//                                 var left = parseInt(classifier[++i]*scaleFactor);
+//                                 var top = parseInt(classifier[++i]*scaleFactor);
+//                                 var right = parseInt(classifier[++i]*scaleFactor)+left;
+//                                 var bottom = parseInt(classifier[++i]*scaleFactor)+top;
+//                                 var weight = classifier[++i];
+//                                 simpleClassifierSum += weight*(rotIntegralImage[bottom][right]-rotIntegralImage[bottom][left]-rotIntegralImage[top][right]+rotIntegralImage[top][left]);
+//                             }
+//                         }
+//                         else{
+//                             var counter = classifier[++i];
                             
-                            //Simple classifier not tilted:
-                            for(var k=0; k<counter; k++){
-                                var left = parseInt(classifier[++i]*scaleFactor);
-                                var top = parseInt(classifier[++i]*scaleFactor);
-                                var right = parseInt(classifier[++i]*scaleFactor)+left;
-                                var bottom = parseInt(classifier[++i]*scaleFactor)+top;
-                                var weight = classifier[++i];
-                                simpleClassifierSum += weight*(integralImage[bottom][right]-integralImage[bottom][left]-integralImage[top][right]+integralImage[top][left]);
-                            }
-                        }
-                        simpleClassifierSum *= classifier[++i];
-                        complexClassifierSum += classifier[i+(simpleClassifierSum > std ? 2:1)];
-                        i+=2;
-                    }
-                    if(complexClassifierSum < complexClassifierThreshold){
-                        found = false;
-                        break;
-                    }
-                }
-                if(found){
-                    rects.push([x, y, windowWidth, windowHeight]);
-                }
-            }
-        }
-        scaleFactor += scale;
-    }while(scaleFactor*windowWidth/ctx.width<0.5 || scaleFactor*windowHeight/ctx.height<0.5);
-    console.log('rects: ',rects);
-}
+//                             //Simple classifier not tilted:
+//                             for(var k=0; k<counter; k++){
+//                                 var left = parseInt(classifier[++i]*scaleFactor);
+//                                 var top = parseInt(classifier[++i]*scaleFactor);
+//                                 var right = parseInt(classifier[++i]*scaleFactor)+left;
+//                                 var bottom = parseInt(classifier[++i]*scaleFactor)+top;
+//                                 var weight = classifier[++i];
+//                                 simpleClassifierSum += weight*(integralImage[bottom][right]-integralImage[bottom][left]-integralImage[top][right]+integralImage[top][left]);
+//                             }
+//                         }
+//                         simpleClassifierSum *= classifier[++i];
+//                         complexClassifierSum += classifier[i+(simpleClassifierSum > std ? 2:1)];
+//                         i+=2;
+//                     }
+//                     if(complexClassifierSum < complexClassifierThreshold){
+//                         found = false;
+//                         break;
+//                     }
+//                 }
+//                 if(found){
+//                     rects.push([x, y, windowWidth, windowHeight]);
+//                 }
+//             }
+//         }
+//         scaleFactor += scale;
+//     }while(scaleFactor*windowWidth/ctx.width<0.5 || scaleFactor*windowHeight/ctx.height<0.5);
+//     console.log('rects: ',rects);
+// }
 
 
 
-/*
+
 
 
 function detectFace(){
@@ -243,15 +243,16 @@ function detectFace(){
         let step = 40; //parseInt(scaledWinWidth/2);
         for(var x=0; x+scaledWinWidth < ctx.width; x+= step){
             for(var y=0; y+scaledWinHeight <ctx.height; y+=step){
-                let mean = (integralImage[x][y]-integralImage[x+scaledWinWidth][y]-integralImage[x][y+scaledWinHeight]+integralImage[x+scaledWinWidth][y+scaledWinHeight]);
+                let mean = (integralImage[x][y]-integralImage[x+scaledWinWidth][y]-integralImage[x][y+scaledWinHeight]+integralImage[x+scaledWinWidth][y+scaledWinHeight])/area;
                 let variance = (squaredIntegralImage[x][y]-squaredIntegralImage[x+scaledWinWidth][y]-squaredIntegralImage[x][y+scaledWinHeight]+squaredIntegralImage[x+scaledWinHeight][y+scaledWinWidth])*area-(mean*mean);
                 let std = variance > 1 ? Math.sqrt(variance) : 1;
                 let found = true;
 
-                for(var i=2, iEnd=classifier.length; i<iEnd;){
+                for(var i=2, iEnd=classifier.length-1; i<iEnd;){
                     let complexClassifierThreshold = classifier[i++];
                     let complexClassifierSum = 0;
-                    for(var j=0; j<classifier[i++]; j++){
+                    let outerCounter = classifier[i++];
+                    for(var j=0; j<outerCounter; j++){
                         let simpleClassifierSum = 0;
 
                         if(classifier[i++]){
@@ -281,6 +282,7 @@ function detectFace(){
                         simpleClassifierSum *= classifier[i++];
                         complexClassifierSum += classifier[i+(simpleClassifierSum > std ? 2:1)];
                         i+=2;
+                        if(j==outerCounter-1) i--;
                     }
                     if(complexClassifierSum < complexClassifierThreshold){
                         found = false;
@@ -293,8 +295,8 @@ function detectFace(){
             }
         }
         scaleFactor += scale;
+        console.log('scale: ', scaleFactor);
     }while(scaleFactor*windowWidth/ctx.width<0.8 || scaleFactor*windowHeight/ctx.height<0.8);
     console.log('rects: ',rects);
 }
 
-*/
