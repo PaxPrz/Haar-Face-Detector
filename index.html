@@ -5,20 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HOG-Face-Detector</title>
-    <style>
-    body{
-        background-color: ivory;  
-    }    
-    #canvas{
-        border: 1px solid red;
-        display: block;
-    }
-    </style>
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 </head>
 <body>
-    <canvas id="imageCanvas"></canvas>
-    <input type="file" id="inputImage"/>
-    <button type="submit" onclick="resize(1.1);">resize</button>
+    <div class="main-wrapper">
+        <div class="header">
+            <div class="header icon">
+
+            </div>
+            <div class="header options">
+                <ul>
+                    <li><button onclick="document.getElementById('inputImage').click();"><i class="fa fa-image"></i>Load</button><input type="file" id="inputImage" style="display: none;" /></li>
+                    <li><button onclick="shadesDropFunction();" class="dropbtn">Shades</button>
+                        <ul id="shadesDropdown" class="dropdown-content">
+                                <li><button id="shade1" class="shadesbtn" onclick="addShades(0);" style="width: 50px; background-image: url('./images/shades/shades1.png'); background-size: 50px; background-repeat: no-repeat; ">Shade1</button></li>
+
+                            <li><button id="shade1" class="shadesbtn" style="background: url('./images/shades/shades1.png') 50px 30px no-repeat;">Shade1</button></li>
+                            <li><button id="shade1" class="shadesbtn"  style="background: url('./images/shades/shades1.png');">Shade1</button></li>
+                            <li><button id="shade1"  class="shadesbtn" style="background: url('./images/shades/shades1.png');">Shade1</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="canvas-wrap">
+            <canvas id="imageCanvas"></canvas>
+            <div id="forDiv">
+            </div>
+        </div>
+        <input type="file" id="inputImage"/>
+        <button type="submit" onclick="resize(1.1);">resize</button>
+        
+    </div>
+    
+    <script src="./js/dropdown.js"></script>
     <script src="./js/preprocess.js"></script>
 </body>
 </html>
