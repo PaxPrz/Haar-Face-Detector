@@ -51,19 +51,19 @@ function loadFile(input){
                     }
                 }
 
-                console.log('faceArr: ', faceArr);
+                // console.log('faceArr: ', faceArr);
 
-                rescaleToOriginal();
-                grayScale();
+                // rescaleToOriginal();
+                // grayScale();
 
-                originalGrayScale = grayscaledImg;
-                for(var i=0; i<validFaces.length; i++){
-                    eyesArr = eyesArr.concat(detectEyes(validFaces[i], true));
-                }
+                // originalGrayScale = grayscaledImg;
+                // for(var i=0; i<validFaces.length; i++){
+                //     eyesArr = eyesArr.concat(detectEyes(validFaces[i], true));
+                // }
 
                 rescaleToOriginal();
                 rectDraw(validFaces, 'face');
-                rectDraw(eyesArr, 'eye');
+                // rectDraw(eyesArr, 'eye');
             };
             image.src = e.target.result;
         };
@@ -120,6 +120,31 @@ function changeActive(id){
     }
 }
 
+function removeExisting(filter){
+    var childrens = canvasWrap.children;
+    // console.log('childrens : '+childrens);
+    // for(var i=0; i<childrens.length; i++){
+    //     console.log(childrens[i]);
+    // }
+    // var toRemove = [];
+    let len = childrens.length;
+    for(var iIndex=0; iIndex<validFaces.length; iIndex++){
+        if(validFaces[iIndex][4]>0){
+            for(var i=0; i<len; i++){
+                if(childrens[i].id.substr(0, filter.length) == filter){
+                    // console.log('stage1');
+                    if(childrens[i].id[childrens[i].id.length-1]==iIndex)
+                    {
+                        canvasWrap.removeChild(childrens[i]);
+                        len--;
+                        i--;
+                    }
+                }
+            }
+        }
+    }
+}
+
 var shadesFilters = ['images/shades/shades1.png','images/shades/shades2.png','images/shades/shades3.png'];
 var shadesArr=(()=>{
     var arr = [];
@@ -134,11 +159,14 @@ var shadesArr=(()=>{
 })();
 
 function addShades(shadeIndex){
-    console.log('shadeIndex: ', shadeIndex);
-    console.log('call addShades');
-    console.log('validFaces: ', validFaces);
-    var validFacesLen = validFaces.length;
+    // console.log('shadeIndex: ', shadeIndex);
+    // console.log('call addShades');
+    // console.log('validFaces: ', validFaces);
     var iIndex = 0;
+    removeExisting('shade');
+    if(shadeIndex<0){
+        return;
+    }
     for(iIndex=0; iIndex<validFaces.length; iIndex++){
     // while(true){
         if(validFaces[iIndex][4]>0){
@@ -182,6 +210,10 @@ var wigArr=(()=>{
 
 function addWig(wigIndex){
     var iIndex = 0;
+    removeExisting('wig');
+    if(wigIndex<0){
+        return;
+    }
     while(true){
         if(validFaces[iIndex][4]>0){
             var wig = wigArr[wigIndex].cloneNode(true);
@@ -222,6 +254,10 @@ var beardArr=(()=>{
 
 function addBeard(beardIndex){
     var iIndex = 0;
+    removeExisting('beard');
+    if(beardIndex<0){
+        return;
+    }
     while(true){
         if(validFaces[iIndex][4]>0){
             var beard = beardArr[beardIndex].cloneNode(true);
@@ -262,6 +298,10 @@ var hatArr=(()=>{
 
 function addHat(hatIndex){
     var iIndex = 0;
+    removeExisting('hat');
+    if(hatIndex<0){
+        return;
+    }
     while(true){
         if(validFaces[iIndex][4]>0){
             var hat = hatArr[hatIndex].cloneNode(true);
@@ -271,7 +311,7 @@ function addHat(hatIndex){
                 hat.style.width = parseInt(validFaces[myIndex][2]*1.1)+'px';
                 hat.style.height = parseInt(parseInt(hat.style.width/aspectRatio))+'px';
                 hat.style.position = 'absolute';
-                hat.style.left = validFaces[myIndex][0]-parseInt(hat.style.width)/12 + 'px';
+                hat.style.left = validFaces[myIndex][0]-parseInt(hat.style.width)/24 + 'px';
                 hat.style.top = validFaces[myIndex][1]-parseInt(validFaces[myIndex][3]*0.7)+'px';
                 hat.setAttribute('id', 'hat'+hatIndex+'-'+myIndex);
                 hat.style.zIndex = 600;
