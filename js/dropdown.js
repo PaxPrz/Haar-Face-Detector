@@ -10,6 +10,11 @@ function beardDropFunction(){
     document.getElementById('beardDropdown').classList.toggle('show');
 }
 
+function hatDropFunction(){
+    document.getElementById('hatDropdown').classList.toggle('show');
+}
+
+
 window.onclick = function(event){
     if(!event.target.matches('.dropbtn')){
         console.log('Window exit called');

@@ -99,6 +99,10 @@
   
   .show {display: block;}
 
+#verticalSpace{
+    width: 100%;
+    height: 100px;
+}
 
 #canvas-wrap{
     width:100%;

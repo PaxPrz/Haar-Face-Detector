@@ -120,7 +120,18 @@ function changeActive(id){
     }
 }
 
-var shadesFilters = ['../images/shades/shades1.png','../images/shades/shades2.png','../images/shades/shades3.png'];
+var shadesFilters = ['images/shades/shades1.png','images/shades/shades2.png','images/shades/shades3.png'];
+var shadesArr=(()=>{
+    var arr = [];
+    for(var i=0; i<shadesFilters.length; i++){
+        arr.push(new Image());
+        arr[i].src = shadesFilters[i];
+        arr[i].onload = ()=>{
+            console.log('Shades : '+i+' Loaded');
+        }
+    }
+    return arr;
+})();
 
 function addShades(shadeIndex){
     console.log('shadeIndex: ', shadeIndex);
@@ -128,13 +139,13 @@ function addShades(shadeIndex){
     console.log('validFaces: ', validFaces);
     var validFacesLen = validFaces.length;
     var iIndex = 0;
-    // for(iIndex=0; iIndex<validFaces.length; iIndex++){
-    while(true){
+    for(iIndex=0; iIndex<validFaces.length; iIndex++){
+    // while(true){
         if(validFaces[iIndex][4]>0){
             console.log('call Index: ', iIndex);
-            var shade = new Image();
+            var shade = shadesArr[shadeIndex].cloneNode(true);
             let myIndex = iIndex;
-            shade.onload = (event)=>{
+            // shade.onload = (event)=>{
                 let aspectRatio = shade.width/shade.height;
                 shade.style.width = validFaces[myIndex][2]-parseInt(validFaces[myIndex][2]/6)+'px';
                 shade.style.height = parseInt(parseInt(shade.style.width)/aspectRatio)+'px';
@@ -142,29 +153,40 @@ function addShades(shadeIndex){
                 shade.style.left = validFaces[myIndex][0]+parseInt(validFaces[myIndex][2]/12)+'px';
                 shade.style.top = validFaces[myIndex][1]+parseInt(validFaces[myIndex][3]/4)+'px';
                 shade.setAttribute('id', 'shade'+shadeIndex+'-'+myIndex);
-                shade.style.zIndex = 600;
+                shade.style.zIndex = 500;
                 canvasWrap.appendChild(shade);
                 console.log('done shade'+myIndex);
-            }
-            shade.src = shadesFilters[shadeIndex];
+            // }
+            // shade.src = shadesFilters[shadeIndex];
             
         }
-        if(iIndex >= validFaces.length -1){
-            break;
-        }
-        iIndex++;
+        // if(iIndex >= validFaces.length -1){
+        //     break;
+        // }
+        // iIndex++;
     }
 }
 
-var wigFilters = ['../images/wig/wig1.png','../images/wig/wig2.png'];
+var wigFilters = ['images/wig/wig1.png','images/wig/wig2.png'];
+var wigArr=(()=>{
+    var arr = [];
+    for(var i=0; i<wigFilters.length; i++){
+        arr.push(new Image());
+        arr[i].src = wigFilters[i];
+        arr[i].onload = ()=>{
+            console.log('wig : '+i+' Loaded');
+        }
+    }
+    return arr;
+})();
 
 function addWig(wigIndex){
     var iIndex = 0;
     while(true){
         if(validFaces[iIndex][4]>0){
-            var wig = new Image();
+            var wig = wigArr[wigIndex].cloneNode(true);
             let myIndex = iIndex;
-            wig.onload = (event)=>{
+            // wig.onload = (event)=>{
                 let aspectRatio = wig.width/wig.height;
                 wig.style.width = parseInt(validFaces[myIndex][2]*1.3)+'px';
                 wig.style.height = parseInt(parseInt(wig.style.width/aspectRatio))+'px';
@@ -172,11 +194,11 @@ function addWig(wigIndex){
                 wig.style.left = validFaces[myIndex][0]-parseInt(wig.style.width)/8 + 'px';
                 wig.style.top = validFaces[myIndex][1]-parseInt(validFaces[myIndex][3]*0.35)+'px';
                 wig.setAttribute('id', 'wig'+wigIndex+'-'+myIndex);
-                wig.style.zIndex = 00;
+                wig.style.zIndex = 500;
                 canvasWrap.appendChild(wig);
                 console.log('done wig: '+myIndex);
-            }
-            wig.src = wigFilters[wigIndex];
+            // }
+            // wig.src = wigFilters[wigIndex];
         }
         if(iIndex >= validFaces.length-1){
             break;
@@ -185,15 +207,26 @@ function addWig(wigIndex){
     }
 }
 
-var beardFilters = ['../images/beard/beard1.png'];
+var beardFilters = ['images/beard/beard1.png','images/beard/beard2.png'];
+var beardArr=(()=>{
+    var arr = [];
+    for(var i=0; i<beardFilters.length; i++){
+        arr.push(new Image());
+        arr[i].src = beardFilters[i];
+        arr[i].onload = ()=>{
+            console.log('Beard : '+i+' Loaded');
+        }
+    }
+    return arr;
+})();
 
 function addBeard(beardIndex){
     var iIndex = 0;
     while(true){
         if(validFaces[iIndex][4]>0){
-            var beard = new Image();
+            var beard = beardArr[beardIndex].cloneNode(true);
             let myIndex = iIndex;
-            beard.onload = (event)=>{
+            // beard.onload = (event)=>{
                 let aspectRatio = beard.width/beard.height;
                 beard.style.width = parseInt(validFaces[myIndex][2]*1.3)+'px';
                 beard.style.height = parseInt(parseInt(beard.style.width/aspectRatio))+'px';
@@ -201,11 +234,51 @@ function addBeard(beardIndex){
                 beard.style.left = validFaces[myIndex][0]-parseInt(beard.style.width)/8 + 'px';
                 beard.style.top = validFaces[myIndex][1]+parseInt(validFaces[myIndex][3]*0.53)+'px';
                 beard.setAttribute('id', 'beard'+beardIndex+'-'+myIndex);
-                beard.style.zIndex = 00;
+                beard.style.zIndex = 500;
                 canvasWrap.appendChild(beard);
                 console.log('done wig: '+myIndex);
-            }
-            beard.src = beardFilters[beardIndex];
+            // }
+            // beard.src = beardFilters[beardIndex];
+        }
+        if(iIndex >= validFaces.length-1){
+            break;
+        }
+        iIndex++;
+    }
+}
+
+var hatFilters = ['../images/hat/hat1.png'];
+var hatArr=(()=>{
+    var arr = [];
+    for(var i=0; i<hatFilters.length; i++){
+        arr.push(new Image());
+        arr[i].src = hatFilters[i];
+        arr[i].onload = ()=>{
+            console.log('Hat : '+i+' Loaded');
+        }
+    }
+    return arr;
+})();
+
+function addHat(hatIndex){
+    var iIndex = 0;
+    while(true){
+        if(validFaces[iIndex][4]>0){
+            var hat = hatArr[hatIndex].cloneNode(true);
+            let myIndex = iIndex;
+            // hat.onload = (event)=>{
+                let aspectRatio = hat.width/hat.height;
+                hat.style.width = parseInt(validFaces[myIndex][2]*1.1)+'px';
+                hat.style.height = parseInt(parseInt(hat.style.width/aspectRatio))+'px';
+                hat.style.position = 'absolute';
+                hat.style.left = validFaces[myIndex][0]-parseInt(hat.style.width)/12 + 'px';
+                hat.style.top = validFaces[myIndex][1]-parseInt(validFaces[myIndex][3]*0.7)+'px';
+                hat.setAttribute('id', 'hat'+hatIndex+'-'+myIndex);
+                hat.style.zIndex = 600;
+                canvasWrap.appendChild(hat);
+                console.log('done hat: '+myIndex);
+            // }
+            // beard.src = beardFilters[beardIndex];
         }
         if(iIndex >= validFaces.length-1){
             break;
