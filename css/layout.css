@@ -12,6 +12,7 @@
     width: 100%;
     background-color: black;
     height: 40px;
+    z-index: 901;
 }
 
 .header .icon{
@@ -26,6 +27,7 @@
     background-color: yellow;
     width: auto;
     height: 40px;
+    z-index: 900;
 }
 
 .header .options ul{
@@ -36,7 +38,7 @@
 
 .header .options ul li{
     float:left;
-    z-index: 600;
+    z-index: 900;
 }
 
 .header .options ul li ul{
@@ -50,8 +52,8 @@
 }
 
 .shadesbtn{
-    width: 50px;
-    height: 50px;
+    width: 150px;
+    height: 100px;
     /* background-repeat: no-repeat;
     background-size: 50px; */
 }
@@ -63,6 +65,7 @@
     font-size: 16px;
     border: none;
     cursor: pointer;
+    z-index: 900;
   }
   
   .dropbtn:hover, .dropbtn:focus {
@@ -72,6 +75,7 @@
   .dropdown {
     position: relative;
     display: inline-block;
+    z-index: 900
   }
   
   .dropdown-content {
@@ -81,7 +85,7 @@
     min-width: 160px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 700;
+    z-index: 900;
   }
   
   .dropdown-content a {

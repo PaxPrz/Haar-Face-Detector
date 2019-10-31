@@ -20,11 +20,27 @@
                     <li><button onclick="document.getElementById('inputImage').click();"><i class="fa fa-image"></i>Load</button><input type="file" id="inputImage" style="display: none;" /></li>
                     <li><button onclick="shadesDropFunction();" class="dropbtn">Shades</button>
                         <ul id="shadesDropdown" class="dropdown-content">
-                                <li><button id="shade1" class="shadesbtn" onclick="addShades(0);" style="width: 50px; background-image: url('./images/shades/shades1.png'); background-size: 50px; background-repeat: no-repeat; ">Shade1</button></li>
+                                <!-- <li><button id="shade1" class="shadesbtn" onclick="addShades(0);" style="width: 50px; background-image: url('./images/shades/shades1.png'); background-size: 50px; background-repeat: no-repeat; ">Shade1</button></li> -->
+                            <li><button id="shade1" class="shadesbtn" onclick="addShades(0);" style="background: url('./images/shades/shades1.png') 0px 0px no-repeat; background-size: 150px;">Shade1</button></li>
+                            <li><button id="shade2" class="shadesbtn" onclick="addShades(1);"  style="background: url('./images/shades/shades2.png') 0px 0px no-repeat; background-size: 150px;">Shade1</button></li>
+                            <li><button id="shade3" class="shadesbtn" onclick="addShades(0);" style="background: url('./images/shades/shades1.png') 0px 0px no-repeat; background-size: 150px;">Shade1</button></li>
+                        </ul>
+                    </li>
 
-                            <li><button id="shade1" class="shadesbtn" style="background: url('./images/shades/shades1.png') 50px 30px no-repeat;">Shade1</button></li>
-                            <li><button id="shade1" class="shadesbtn"  style="background: url('./images/shades/shades1.png');">Shade1</button></li>
-                            <li><button id="shade1"  class="shadesbtn" style="background: url('./images/shades/shades1.png');">Shade1</button></li>
+                    <li><button onclick="wigDropFunction();" class="dropbtn">Wig</button>
+                        <ul id="wigDropdown" class="dropdown-content">
+                                <!-- <li><button id="shade1" class="shadesbtn" onclick="addShades(0);" style="width: 50px; background-image: url('./images/shades/shades1.png'); background-size: 50px; background-repeat: no-repeat; ">Shade1</button></li> -->
+                            <li><button id="wig1" class="shadesbtn" onclick="addWig(0);" style="background: url('./images/wig/wig1.png') 0px 0px no-repeat; background-size: 150px;">Wig1</button></li>
+                            <li><button id="wig2" class="shadesbtn" onclick="addWig(1);" style="background: url('./images/wig/wig2.png') 0px 0px no-repeat; background-size: 150px;">Wig1</button></li>
+
+                        </ul>
+                    </li>
+
+                    <li><button onclick="beardDropFunction();" class="dropbtn">Beard</button>
+                        <ul id="beardDropdown" class="dropdown-content">
+                            <li><button id="beard1" class="shadesbtn" onclick="addBeard(0);" style="background: url('./images/beard/beard1.png') 0px 0px no-repeat; background-size: 150px;">Wig1</button></li>
+                            <li><button id="beard2" class="shadesbtn" onclick="addBeard(1);" style="background: url('./images/beard/beard1.png') 0px 0px no-repeat; background-size: 150px;">Wig1</button></li>
+
                         </ul>
                     </li>
                 </ul>

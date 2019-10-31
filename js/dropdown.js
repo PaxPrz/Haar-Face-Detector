@@ -2,6 +2,14 @@ function shadesDropFunction(){
     document.getElementById('shadesDropdown').classList.toggle('show');
 }
 
+function wigDropFunction(){
+    document.getElementById('wigDropdown').classList.toggle('show');
+}
+
+function beardDropFunction(){
+    document.getElementById('beardDropdown').classList.toggle('show');
+}
+
 window.onclick = function(event){
     if(!event.target.matches('.dropbtn')){
         console.log('Window exit called');
