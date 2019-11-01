@@ -12,6 +12,8 @@ var ch = canvas.clientHeight;
 var input = document.getElementById('inputImage');
 input.addEventListener('change', loadFile);
 
+var detectEyesToo = false;
+
 function loadFile(input){
     if(canvasWrap.hasChildNodes){
         canvasWrap.innerHTML = "";
@@ -56,26 +58,61 @@ function loadFile(input){
 
                 // console.log('faceArr: ', faceArr);
 
-                // rescaleToOriginal();
-                // grayScale();
+                if(detectEyesToo){
+                    rescaleToOriginal();
+                    grayScale();
 
-                // originalGrayScale = grayscaledImg;
-                // for(var i=0; i<validFaces.length; i++){
-                //     eyesArr = eyesArr.concat(detectEyes(validFaces[i], true));
-                // }
+                    originalGrayScale = grayscaledImg;
+                    for(var i=0; i<validFaces.length; i++){
+                        eyesArr = eyesArr.concat(detectEyes(validFaces[i], true));
+                    }
+                }
 
                 rescaleToOriginal();
                 rectDraw(validFaces, 'face');
-                // rectDraw(eyesArr, 'eye');
+                if(detectEyesToo) rectDraw(eyesArr, 'eye');
 
-                hintBoard.innerHTML = `Click on yellow mask to disable face`;
+                hintBoard.innerHTML = `Click on yellow mask to unselect face`;
                 setTimeout(()=>{
                     hintBoard.innerHTML = `Select filters from above drop down lists. :D`;
+                    if(validFaces.length ==0){
+                        hintBoard.innerHTML = `Try another image with straighten faces`
+                    }
                 }, 5000);
+                if(validFaces.length ==0){
+                    hintBoard.innerHTML = `<span style="color:red">No face detected!</span>`;
+                }
             };
             image.src = e.target.result;
         };
         reader.readAsDataURL(input.target.files[0]);
+    }
+}
+
+function showEyes(){
+    var childrens = canvasWrap.children;
+    var eyeString = 'eye';
+    for(var i=0; i<childrens.length; i++){
+        if(childrens[i].id.substr(0, eyeString.length) == eyeString){
+            if(!detectEyesToo){
+                childrens[i].style.display = 'none';
+            }else{
+                childrens[i].style.display = 'block';
+            }
+        }
+    }
+}
+
+function detectEyesButton(){
+    if(detectEyesToo){
+        detectEyesToo = false;
+        showEyes();
+        document.getElementById('detectEyeBool').innerHTML = 'OFF';
+    }else{
+        console.log('detect eye: ON');
+        detectEyesToo = true;
+        showEyes();
+        document.getElementById('detectEyeBool').innerHTML = 'ON';
     }
 }
 
@@ -187,7 +224,6 @@ function addShades(shadeIndex){
             console.log('call Index: ', iIndex);
             var shade = shadesArr[shadeIndex].cloneNode(true);
             let myIndex = iIndex;
-            // shade.onload = (event)=>{
                 let aspectRatio = shade.width/shade.height;
                 shade.style.width = validFaces[myIndex][2]-parseInt(validFaces[myIndex][2]/6)+'px';
                 shade.style.height = parseInt(parseInt(shade.style.width)/aspectRatio)+'px';
@@ -198,14 +234,8 @@ function addShades(shadeIndex){
                 shade.style.zIndex = 500;
                 canvasWrap.appendChild(shade);
                 console.log('done shade'+myIndex);
-            // }
-            // shade.src = shadesFilters[shadeIndex];
             
         }
-        // if(iIndex >= validFaces.length -1){
-        //     break;
-        // }
-        // iIndex++;
     }
 }
 
@@ -228,11 +258,10 @@ function addWig(wigIndex){
     if(wigIndex<0){
         return;
     }
-    while(true){
+    for(iIndex=0; iIndex<validFaces.length; iIndex++){
         if(validFaces[iIndex][4]>0){
             var wig = wigArr[wigIndex].cloneNode(true);
             let myIndex = iIndex;
-            // wig.onload = (event)=>{
                 let aspectRatio = wig.width/wig.height;
                 wig.style.width = parseInt(validFaces[myIndex][2]*1.3)+'px';
                 wig.style.height = parseInt(parseInt(wig.style.width/aspectRatio))+'px';
@@ -243,13 +272,7 @@ function addWig(wigIndex){
                 wig.style.zIndex = 500;
                 canvasWrap.appendChild(wig);
                 console.log('done wig: '+myIndex);
-            // }
-            // wig.src = wigFilters[wigIndex];
         }
-        if(iIndex >= validFaces.length-1){
-            break;
-        }
-        iIndex++;
     }
 }
 
@@ -272,11 +295,10 @@ function addBeard(beardIndex){
     if(beardIndex<0){
         return;
     }
-    while(true){
+    for(iIndex=0; iIndex<validFaces.length; iIndex++){
         if(validFaces[iIndex][4]>0){
             var beard = beardArr[beardIndex].cloneNode(true);
             let myIndex = iIndex;
-            // beard.onload = (event)=>{
                 let aspectRatio = beard.width/beard.height;
                 beard.style.width = parseInt(validFaces[myIndex][2]*1.3)+'px';
                 beard.style.height = parseInt(parseInt(beard.style.width/aspectRatio))+'px';
@@ -287,13 +309,7 @@ function addBeard(beardIndex){
                 beard.style.zIndex = 500;
                 canvasWrap.appendChild(beard);
                 console.log('done wig: '+myIndex);
-            // }
-            // beard.src = beardFilters[beardIndex];
         }
-        if(iIndex >= validFaces.length-1){
-            break;
-        }
-        iIndex++;
     }
 }
 
@@ -316,11 +332,10 @@ function addHat(hatIndex){
     if(hatIndex<0){
         return;
     }
-    while(true){
+    for(iIndex=0; iIndex<validFaces.length; iIndex++){
         if(validFaces[iIndex][4]>0){
             var hat = hatArr[hatIndex].cloneNode(true);
             let myIndex = iIndex;
-            // hat.onload = (event)=>{
                 let aspectRatio = hat.width/hat.height;
                 hat.style.width = parseInt(validFaces[myIndex][2]*1.1)+'px';
                 hat.style.height = parseInt(parseInt(hat.style.width/aspectRatio))+'px';
@@ -331,13 +346,7 @@ function addHat(hatIndex){
                 hat.style.zIndex = 600;
                 canvasWrap.appendChild(hat);
                 console.log('done hat: '+myIndex);
-            // }
-            // beard.src = beardFilters[beardIndex];
         }
-        if(iIndex >= validFaces.length-1){
-            break;
-        }
-        iIndex++;
     }
 }
 
