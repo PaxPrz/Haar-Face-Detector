@@ -4,6 +4,7 @@ var eyeClassifier = [20,20,-1.4562760591506958,6,0,2,0,8,20,12,-1.,0,14,20,6,2.,
 
 var canvas = document.getElementById('imageCanvas');
 var canvasWrap = document.getElementById('forDiv');
+var hintBoard = document.getElementById('hintBoard');
 var ctx = canvas.getContext('2d');
 var cw = canvas.clientWidth;
 var ch = canvas.clientHeight;
@@ -15,6 +16,7 @@ function loadFile(input){
     if(canvasWrap.hasChildNodes){
         canvasWrap.innerHTML = "";
     }
+    hintBoard.innerHTML = `<div class="loader"></div> <span style="left: 100px; top: 0px; position: absolute; width: 400px;">Detecting Faces</span>`;
     if(input.target.files[0]){
         var reader = new FileReader();
 
@@ -25,6 +27,7 @@ function loadFile(input){
                 console.log('documentWidth: ', document.body.clientWidth);
                 if(image.width>document.body.clientWidth){
                     console.log('tooBIG');
+                    hintBoard.innerHTML= '<span style="color: red">Image size exceeding window</span>';
                     return;
                 }
                 canvas.width = image.width;
@@ -64,6 +67,11 @@ function loadFile(input){
                 rescaleToOriginal();
                 rectDraw(validFaces, 'face');
                 // rectDraw(eyesArr, 'eye');
+
+                hintBoard.innerHTML = `Click on yellow mask to disable face`;
+                setTimeout(()=>{
+                    hintBoard.innerHTML = `Select filters from above drop down lists. :D`;
+                }, 5000);
             };
             image.src = e.target.result;
         };
@@ -283,7 +291,7 @@ function addBeard(beardIndex){
     }
 }
 
-var hatFilters = ['../images/hat/hat1.png'];
+var hatFilters = ['images/hat/hat1.png'];
 var hatArr=(()=>{
     var arr = [];
     for(var i=0; i<hatFilters.length; i++){
