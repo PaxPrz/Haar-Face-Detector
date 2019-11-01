@@ -14,6 +14,10 @@ function hatDropFunction(){
     document.getElementById('hatDropdown').classList.toggle('show');
 }
 
+function maskDropFunction(){
+    document.getElementById('maskDropdown').classList.toggle('show');
+}
+
 
 window.onclick = function(event){
     if(!event.target.matches('.dropbtn')){

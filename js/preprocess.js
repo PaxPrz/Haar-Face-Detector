@@ -136,6 +136,7 @@ function removeExisting(filter){
     // }
     // var toRemove = [];
     let len = childrens.length;
+    let isSelected = false;
     for(var iIndex=0; iIndex<validFaces.length; iIndex++){
         if(validFaces[iIndex][4]>0){
             for(var i=0; i<len; i++){
@@ -149,11 +150,16 @@ function removeExisting(filter){
                     }
                 }
             }
+            isSelected = true;
+            hintBoard.innerHTML = ``;
         }
+    }
+    if(!isSelected){
+        hintBoard.innerHTML = `Select a Face First`;
     }
 }
 
-var shadesFilters = ['images/shades/shades1.png','images/shades/shades2.png','images/shades/shades3.png'];
+var shadesFilters = ['images/shades/shades1.png','images/shades/shades2.png','images/shades/shades3.gif'];
 var shadesArr=(()=>{
     var arr = [];
     for(var i=0; i<shadesFilters.length; i++){
@@ -203,7 +209,7 @@ function addShades(shadeIndex){
     }
 }
 
-var wigFilters = ['images/wig/wig1.png','images/wig/wig2.png'];
+var wigFilters = ['images/wig/wig1.png','images/wig/wig2.png','images/wig/wig3.png'];
 var wigArr=(()=>{
     var arr = [];
     for(var i=0; i<wigFilters.length; i++){
@@ -291,7 +297,7 @@ function addBeard(beardIndex){
     }
 }
 
-var hatFilters = ['images/hat/hat1.png'];
+var hatFilters = ['images/hat/hat1.png','images/hat/hat2.png'];
 var hatArr=(()=>{
     var arr = [];
     for(var i=0; i<hatFilters.length; i++){
@@ -325,6 +331,50 @@ function addHat(hatIndex){
                 hat.style.zIndex = 600;
                 canvasWrap.appendChild(hat);
                 console.log('done hat: '+myIndex);
+            // }
+            // beard.src = beardFilters[beardIndex];
+        }
+        if(iIndex >= validFaces.length-1){
+            break;
+        }
+        iIndex++;
+    }
+}
+
+var maskFilters = ['images/mask/mask1.png'];
+var maskArr=(()=>{
+    var arr = [];
+    for(var i=0; i<maskFilters.length; i++){
+        arr.push(new Image());
+        arr[i].src = maskFilters[i];
+        arr[i].onload = ()=>{
+            console.log('Mask : '+i+' Loaded');
+        }
+    }
+    return arr;
+})();
+
+function addMask(maskIndex){
+    var iIndex = 0;
+    removeExisting('mask');
+    if(maskIndex<0){
+        return;
+    }
+    while(true){
+        if(validFaces[iIndex][4]>0){
+            var mask = maskArr[maskIndex].cloneNode(true);
+            let myIndex = iIndex;
+            // hat.onload = (event)=>{
+                let aspectRatio = mask.width/mask.height;
+                mask.style.width = parseInt(validFaces[myIndex][2]*1.5)+'px';
+                mask.style.height = parseInt(parseInt(mask.style.width/aspectRatio))+'px';
+                mask.style.position = 'absolute';
+                mask.style.left = validFaces[myIndex][0]-parseInt(mask.style.width)/6 + 'px';
+                mask.style.top = validFaces[myIndex][1]-parseInt(validFaces[myIndex][3]*0.13)+'px';
+                mask.setAttribute('id', 'mask'+maskIndex+'-'+myIndex);
+                mask.style.zIndex = 800;
+                canvasWrap.appendChild(mask);
+                console.log('done mask: '+myIndex);
             // }
             // beard.src = beardFilters[beardIndex];
         }
@@ -663,85 +713,3 @@ function groupRectangles(rects, minNeighbors, confluence) {
     }
     return filteredGroups;
 };
-
-/*
-function detectFace(){
-    rects=[];
-    windowWidth = classifier[0];
-    windowHeight = classifier[1];
-    scaleFactor = 2;
-    scale = 0.2;
-    do{
-        let scaledWinWidth = parseInt(windowWidth*scaleFactor);
-        let scaledWinHeight = parseInt(windowHeight*scaleFactor);
-        let area = scaledWinHeight*scaledWinWidth;
-        let step = 20; //parseInt(scaledWinWidth/2);
-        for(var x=0; x+scaledWinWidth < ctx.width; x+= step){
-            for(var y=0; y+scaledWinHeight <ctx.height; y+=step){
-                let mean = (integralImage[x][y]-integralImage[x+scaledWinWidth][y]-integralImage[x][y+scaledWinHeight]+integralImage[x+scaledWinWidth][y+scaledWinHeight]);
-                let variance = (squaredIntegralImage[x][y]-squaredIntegralImage[x+scaledWinWidth][y]-squaredIntegralImage[x][y+scaledWinHeight]+squaredIntegralImage[x+scaledWinHeight][y+scaledWinWidth])*area-(mean*mean);
-                let std = variance > 1 ? Math.sqrt(variance) : 1;
-                let found = true;
-
-                for(var i=2, iEnd=classifier.length-1; i<iEnd;){
-                    let complexClassifierThreshold = classifier[i++];
-                    let complexClassifierSum = 0;
-                    let outerCounter = classifier[i++];
-                    for(var j=0; j<outerCounter; j++){
-                        let simpleClassifierSum = 0;
-
-                        if(classifier[i++]){
-                            let counter = classifier[i++];
-                            //Simple classifier is tilted;
-                            for(var k=0; k<counter; k++){
-                                let left = parseInt(classifier[i++]*scaleFactor);
-                                let top = parseInt(classifier[i++]*scaleFactor);
-                                let right = parseInt(classifier[i++]*scaleFactor)+left;
-                                let bottom = parseInt(classifier[i++]*scaleFactor)+top;
-                                let weight = classifier[i++];
-                                simpleClassifierSum += weight*(rotIntegralImage[bottom][right]-rotIntegralImage[bottom][left]-rotIntegralImage[top][right]+rotIntegralImage[top][left]);
-                            }
-                        }
-                        else{                            
-                            let counter = classifier[i++];
-                            //Simple classifier not tilted:
-                            for(var k=0; k<counter; k++){
-                                let left = parseInt(classifier[i++]*scaleFactor);
-                                let top = parseInt(classifier[i++]*scaleFactor);
-                                let right = parseInt(classifier[i++]*scaleFactor)+left;
-                                let bottom = parseInt(classifier[i++]*scaleFactor)+top;
-                                let weight = classifier[i++];
-                                simpleClassifierSum += weight*(integralImage[bottom][right]-integralImage[bottom][left]-integralImage[top][right]+integralImage[top][left]);
-                            }
-                        }
-                        let unknown = classifier[i++];
-                        simpleClassifierSum /= unknown;
-                        let indexToSum = 0;
-                        if(unknown<0){
-                            indexToSum = simpleClassifierSum > std ? 1:2;
-                        }
-                        else{
-                            indexToSum = simpleClassifierSum > std ? 2:1;
-                        }
-                        complexClassifierSum += classifier[i+indexToSum];
-                        i+=2;
-                        //if(j==outerCounter-1) i--;
-                    }
-                    if(complexClassifierSum < complexClassifierThreshold){
-                        found = false;
-                        break;
-                    }
-                }
-                if(found){
-                    console.log('found');
-                    rects.push([x, y, windowWidth, windowHeight]);
-                }
-            }
-        }
-        scaleFactor += scale;
-        console.log('scale: ', scaleFactor);
-    }while(scaleFactor*windowWidth/ctx.width<0.8 && scaleFactor*windowHeight/ctx.height<0.8);
-    console.log('rects: ',rects);
-}
-
-*/
